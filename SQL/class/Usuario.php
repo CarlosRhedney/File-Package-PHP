@@ -91,6 +91,47 @@ class Usuario
 		}
 	}
 
+	public function insert()
+	{
+		$sql = new Sql();
+		$results = $sql->select("CALL sp_usuarios_insert(:user, :mail, :phone)", array(
+			":user"=>$this->getUser(),
+			":mail"=>$this->getMail(),
+			":phone"=>$this->getPhone()
+		));
+		if(isset($results) && count($results) > 0)
+		{
+			$this->setData($results[0]);
+		}
+	}
+
+	public function update($user, $mail, $phone)
+	{
+		$this->setUser($user);
+		$this->setMail($mail);
+		$this->setPhone($phone);
+		$sql = new Sql();
+		$sql->query("UPDATE usuarios SET usuario = :user, email = :mail, tel = :phone WHERE id = :id", array(
+			":user"=>$this->getUser(),
+			":mail"=>$this->getMail(),
+			":phone"=>$this->getPhone(),
+			":id"=>$this->getId()
+		));
+	}
+
+	public function delete()
+	{
+		$sql = new Sql();
+		$sql->query("DELETE FROM usuarios WHERE id = :id", array(
+			":id"=>$this->getId()
+		));
+		$this->setId(0);
+		$this->setUser("");
+		$this->setMail("");
+		$this->setPhone("");
+		$this->setDataRegister(new DateTime());
+	}
+
 	public function __toString()
 	{
 		return json_encode(array(
