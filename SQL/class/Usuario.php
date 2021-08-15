@@ -73,7 +73,7 @@ class Usuario
 	public static function search($user)
 	{
 		$sql = new Sql();
-		return $sql->select("SELECT * FROM usuarios WHERE usuario Like :user", array(
+		return $sql->select("SELECT * FROM usuarios WHERE usuario LIKE :user", array(
 			":user"=>"%".$user."%"
 		));
 	}
@@ -88,6 +88,9 @@ class Usuario
 		if(isset($results) && count($results) > 0)
 		{
 			$this->setData($results[0]);
+		}else
+		{
+			echo "Usúario e ou senha inválidos!";
 		}
 	}
 
